@@ -53,9 +53,17 @@ const submit = () => {
         alerta.tipo = 'error'
         return
     }
-    alerta.mensaje = 'Se registro correctamente', alerta.tipo = 'check'
 
     emit('guardar-paciente')
+    alerta.mensaje = 'Se registro correctamente',
+    alerta.tipo = 'exito'
+
+    setTimeout(() => {
+        Object.assign(alerta,{
+            tipo:'',
+            mensaje:''
+        })
+    }, 3000);
 
 }
 </script>
