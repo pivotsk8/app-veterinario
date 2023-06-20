@@ -2,13 +2,15 @@
 import { ref, reactive } from "vue"
 import Alert from '../components/Alert.vue'
 
-defineEmits([
+const emit = defineEmits([
     'update:nombre',
     'update:propretario',
     'update:email',
     'update:alta',
     'update:sintomas',
+    'guardar-paciente'
 ])
+
 const props = defineProps({
     nombre: {
         type: String,
@@ -51,7 +53,9 @@ const submit = () => {
         alerta.tipo = 'error'
         return
     }
-    return (alerta.mensaje = 'Se registro correctamente', alerta.tipo = 'check')
+    alerta.mensaje = 'Se registro correctamente', alerta.tipo = 'check'
+
+    emit('guardar-paciente')
 
 }
 </script>

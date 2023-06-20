@@ -16,6 +16,10 @@ let paciente = reactive({
     sintomas: ''
 
 })
+
+const guardarPaciente = () => {
+    pacientes.value.push(paciente)
+}
 </script>
 
 <template>
@@ -23,12 +27,9 @@ let paciente = reactive({
         <Header />
 
         <div class="mt-12 md:flex">
-            <Formulario 
-                v-model:nombre="paciente.nombre"
-                v-model:propretario="paciente.propretario"
-                v-model:email="paciente.email"
-                v-model:sintomas="paciente.sintomas"
-                v-model:alta="paciente.alta" />
+            <Formulario v-model:nombre="paciente.nombre" v-model:propretario="paciente.propretario"
+                v-model:email="paciente.email" v-model:sintomas="paciente.sintomas" v-model:alta="paciente.alta"
+                @guardar-paciente="guardarPaciente" />
 
             <div class="md:w-1/2 md:h-screen overflow-y-scroll">
                 <h3 class="font-black text-3xl text-center">Administra tus pacientes</h3>
