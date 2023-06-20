@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { uid } from 'uid'
 import Header from './components/Header.vue';
 import Formulario from './components/Formulario.vue';
 import Paciente from './components/Paciente.vue';
@@ -10,6 +11,7 @@ const pacientes = ref([])
 
 //👉para objetos mejor usar reactive
 let paciente = reactive({
+    id: null,
     nombre: '',
     propretario: '',
     email: '',
@@ -19,9 +21,13 @@ let paciente = reactive({
 })
 
 const guardarPaciente = () => {
-    pacientes.value.push({
-        ...paciente
-    }),
+    const { id } = paciente
+    const i = pacientes.value.findIndex((pacienteState) => pacienteState.id === id)
+    id
+        ? pacientes.value[i] = { ...paciente }
+        : (pacientes.value.push({
+            ...paciente, id: uid()
+        })),
 
         // Reinicier un objeto
         // paciente.nombre = '',
@@ -30,15 +36,21 @@ const guardarPaciente = () => {
         // paciente.alta = '',
         // paciente.sintomas = ''
 
-    //segunta forma de reiniciar un objeto
-Object.assign(paciente,{
-    nombre: '',
-    propretario: '',
-    email: '',
-    alta: '',
-    sintomas: ''
-})
+        //segunta forma de reiniciar un objeto
+        Object.assign(paciente, {
+            id: null,
+            nombre: '',
+            propretario: '',
+            email: '',
+            alta: '',
+            sintomas: ''
+        })
 
+}
+
+const actualizarPaciente = (id) => {
+    const pacienteEditar = pacientes.value.filter(paciente => paciente.id === id)[0]
+    Object.assign(paciente, pacienteEditar)
 }
 </script>
 
@@ -47,9 +59,14 @@ Object.assign(paciente,{
         <Header />
 
         <div class="mt-12 md:flex">
-            <Formulario v-model:nombre="paciente.nombre" v-model:propretario="paciente.propretario"
-                v-model:email="paciente.email" v-model:sintomas="paciente.sintomas" v-model:alta="paciente.alta"
-                @guardar-paciente="guardarPaciente" />
+            <Formulario 
+            v-model:nombre="paciente.nombre" 
+            v-model:propretario="paciente.propretario"
+            v-model:email="paciente.email" 
+            v-model:sintomas="paciente.sintomas" 
+            v-model:alta="paciente.alta"
+            @guardar-paciente="guardarPaciente" 
+            :id="paciente.id"/>
 
             <div class="md:w-1/2 md:h-screen overflow-y-scroll">
                 <h3 class="font-black text-3xl text-center">Administra tus pacientes</h3>
@@ -60,7 +77,8 @@ Object.assign(paciente,{
                         <span class="text-indigo-600 font-bold">Pacientes</span>
                     </p>
 
-                    <Paciente v-for="paciente in pacientes" :paciente="paciente" />
+                    <Paciente v-for="paciente in pacientes" :paciente="paciente"
+                        @actualizar-paciente="actualizarPaciente" />
                 </div>
                 <p v-else class="mt-10 text-2xl text-center">No hay pacientes</p>
             </div>

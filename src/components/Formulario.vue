@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue"
+import { reactive, computed } from "vue"
 import Alert from '../components/Alert.vue'
 
 const emit = defineEmits([
@@ -12,6 +12,10 @@ const emit = defineEmits([
 ])
 
 const props = defineProps({
+    id: {
+        type: [String, null],
+        required: true
+    },
     nombre: {
         type: String,
         required: true
@@ -56,16 +60,20 @@ const submit = () => {
 
     emit('guardar-paciente')
     alerta.mensaje = 'Se registro correctamente',
-    alerta.tipo = 'exito'
+        alerta.tipo = 'exito'
 
     setTimeout(() => {
-        Object.assign(alerta,{
-            tipo:'',
-            mensaje:''
+        Object.assign(alerta, {
+            tipo: '',
+            mensaje: ''
         })
     }, 3000);
 
 }
+//cuando se vaya a terner logica en el template es mejor tener una computed propretie
+const editando = computed(() => {
+    return props.id
+})
 </script>
 
 <template>
@@ -125,7 +133,7 @@ const submit = () => {
             </div>
 
             <input type="submit" class="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 
-            cursor-pointer transition-color" value="Registrar paciente" />
+            cursor-pointer transition-color" :value="[editando ? 'Guardar Cambios' : 'Registrar Paciente']" />
 
         </form>
     </div>
