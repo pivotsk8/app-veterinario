@@ -7,7 +7,7 @@ import Paciente from './components/Paciente.vue';
 
 /*👉 para valores unicos se usa mejor ref
 const nombre = ref("") */
-const pacientes = ref([])
+const pacientes = ref([]);
 
 //👉para objetos mejor usar reactive
 let paciente = reactive({
@@ -18,15 +18,15 @@ let paciente = reactive({
     alta: '',
     sintomas: ''
 
-})
+});
 
 watch(pacientes, () => {
     guardarLocalStorage()
-}, { deep: true })
+}, { deep: true });
 
 const guardarLocalStorage = () => {
     localStorage.setItem('pacientes', JSON.stringify(pacientes.value))
-}
+};
 
 const guardarPaciente = () => {
     const { id } = paciente
@@ -55,16 +55,16 @@ const guardarPaciente = () => {
 
         })
 
-}
+};
 
 const actualizarPaciente = id => {
     const pacienteEditar = pacientes.value.filter(paciente => paciente.id === id)[0]
     Object.assign(paciente, pacienteEditar)
-}
+};
 
 const eliminarPaciente = id => {
     pacientes.value = pacientes.value.filter(paciente => paciente.id !== id)
-}
+};
 
 
 onMounted(() => {
@@ -72,7 +72,7 @@ onMounted(() => {
     if (pacienteStorage) {
         pacientes.value = JSON.parse(pacienteStorage)
     }
-}),
+})
 
 </script>
 
